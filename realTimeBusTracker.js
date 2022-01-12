@@ -3,8 +3,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoicndlaXNiZXJnZXIiLCJhIjoiY2t5NmNiOGs2MGl5eTJua
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
-    center: [-71.101,42.358],
-    zoom: 12
+    center: [-71.101,42.348],
+    zoom: 12.5
 });
 
 // Trying to get a bus icon
