@@ -37,7 +37,9 @@ async function run(){
 	currentMarkers = [];
 
 	locations.forEach(location => {
-		const marker = new mapboxgl.Marker()
+		const el = document.createElement('div');
+			el.className = 'busMarker';
+		const marker = new mapboxgl.Marker(el)
 			.setLngLat(location)
 			.addTo(map);
 
@@ -56,7 +58,7 @@ async function getBusLocations(){
 	const response = await fetch(url);
 	const json     = await response.json(); 
 
-
+console.log(json.data)
 	// create an array of arrays for bus locations
 	let length = json.data.length;
 	let busLocations = [];
