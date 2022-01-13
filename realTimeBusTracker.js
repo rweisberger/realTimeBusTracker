@@ -7,49 +7,60 @@ const map = new mapboxgl.Map({
     zoom: 12.5
 });
 
-// Trying to get a bus icon
-// var geojson = {
-// 	type:'FeatureCollection',
-// 	features: [{
-// 		type: 'Feature',
-// 		geometry: {
-// 			type: 'Point',
-// 			coordinates: [[-71.101,42.358]]
-// 		},
-// 		properties: {
-// 			title: 'Mapbox',
-// 			description: 'bus'
-// 		}
-// }]
-// }
 
 let currentMarkers = [];
 
 async function run(){
-    // get bus data    
-	const locations = await getBusLocations();
-	// console.log(new Date());
-	// console.log(locations);
-	
+	const busInfo = await getBusLocations();
+	let blueBusLocations = [];
+	let redBusLocations = [];
+
+
 	for (let i = 0; i < currentMarkers.length; i++) {
-      currentMarkers[i].remove();
+    	currentMarkers[i].remove();
     }
+
 	currentMarkers = [];
 
-	locations.forEach(location => {
-		const el = document.createElement('div');
-			el.className = 'busMarker';
-		const marker = new mapboxgl.Marker(el)
-			.setLngLat(location)
-			.addTo(map);
+	for (let i = 0; i < busInfo.length; i++) {
+		if (busInfo[i][0] === 0) {
+				let newLocation = [];
+				newLocation.push(busInfo[i][1]);
+				newLocation.push(busInfo[i][2]);
+				blueBusLocations.push(newLocation);
+			
+			blueBusLocations.forEach(location => {
+				const el = document.createElement('div');
+					el.className = 'blueBusMarker';
+				const marker = new mapboxgl.Marker(el)
+					.setLngLat(location)
+					.addTo(map);
 
-		currentMarkers.push(marker);
-	});
+				currentMarkers.push(marker);
+			});
+		}
+	}
+	for (let i = 0; i < busInfo.length; i++) {
+		if (busInfo[i][0] === 1) {
+				let newLocation = [];
+				newLocation.push(busInfo[i][1]);
+				newLocation.push(busInfo[i][2]);
+				redBusLocations.push(newLocation);
+			
+			redBusLocations.forEach(location => {
+				const el = document.createElement('div');
+					el.className = 'redBusMarker';
+				const marker = new mapboxgl.Marker(el)
+					.setLngLat(location)
+					.addTo(map);
 
-	// console.log(currentMarkers)
+				currentMarkers.push(marker);
+			});
+		}
+	}
+	console.log(currentMarkers)
 
 	setTimeout(run, 15000);
-	
 }
 
 // Request bus data from MBTA and returns object for locations
@@ -61,18 +72,18 @@ async function getBusLocations(){
 console.log(json.data)
 	// create an array of arrays for bus locations
 	let length = json.data.length;
-	let busLocations = [];
+	let busInfo = [];
 	for (let i=0; i<length; i++) {
-		var newLocation= [];
-		newLocation.push(json.data[i].attributes.longitude);
-		newLocation.push(json.data[i].attributes.latitude);
-		busLocations.push(newLocation)
+		var newBus= [];
+		newBus.push(json.data[i].attributes.direction_id);
+		newBus.push(json.data[i].attributes.longitude);
+		newBus.push(json.data[i].attributes.latitude);
+		busInfo.push(newBus)
 	}
 
-	console.log(busLocations);
-	return busLocations;	
+	console.log(busInfo);
+	return busInfo;	
 };
 
 run();
-
 
