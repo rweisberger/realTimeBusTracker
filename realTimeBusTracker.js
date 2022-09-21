@@ -11,12 +11,12 @@ const map = new mapboxgl.Map({
 let currentMarkers = [];
 let routeNum;
 
+// see which route we want to get information for
 const element = document.getElementById("routes-list");
 	element.addEventListener("click", event => {
-  // Check if it’s the list element, we want the clicks only from them
 	routeNum = event.target.innerHTML;
-    console.log('The item ' + event.target.innerHTML + ' was just clicked')
-  
+    // console.log('The item ' + event.target.innerHTML + ' was just clicked')
+	
 	run();
 });
 
@@ -30,6 +30,9 @@ async function run(){
     }
 
 	currentMarkers = [];
+	if(busInfo.length === 0) {
+
+	}
 
 	for (let i = 0; i < busInfo.length; i++) {
 		if (busInfo[i].direction === 0) {
@@ -106,19 +109,23 @@ async function getBusLocations(){
 	const response = await fetch(url);
 	const json     = await response.json(); 
 
-console.log(json.data)
 	// create an array of objects for bus locations
 	let length = json.data.length;
 	let busInfo = [];
-	for (let i=0; i<length; i++) {
-		let formatOccupancy = json.data[i].attributes.occupancy_status ? json.data[i].attributes.occupancy_status.toLowerCase().replaceAll('_', ' ') : 'Unknown';
-		let newBus = ({direction: json.data[i].attributes.direction_id,
-					longitude: json.data[i].attributes.longitude,
-					latitude: json.data[i].attributes.latitude,
-					occupancy: formatOccupancy
-					});
-		busInfo.push(newBus)
-	}
+	if(length === 0) {
+		document.getElementById("alert").innerHTML = "No buses en route";
+		console.log('no buses')
+	} else {
+		for (let i=0; i<length; i++) {
+			let formatOccupancy = json.data[i].attributes.occupancy_status ? json.data[i].attributes.occupancy_status.toLowerCase().replaceAll('_', ' ') : 'Unknown';
+			let newBus = ({direction: json.data[i].attributes.direction_id,
+						longitude: json.data[i].attributes.longitude,
+						latitude: json.data[i].attributes.latitude,
+						occupancy: formatOccupancy
+						});
+			busInfo.push(newBus)
+	}}
+	
 	return busInfo;	
 };
 
