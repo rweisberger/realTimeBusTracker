@@ -9,6 +9,16 @@ const map = new mapboxgl.Map({
 
 
 let currentMarkers = [];
+let routeNum;
+
+const element = document.getElementById("routes-list");
+	element.addEventListener("click", event => {
+  // Check if it’s the list element, we want the clicks only from them
+	routeNum = event.target.innerHTML;
+    console.log('The item ' + event.target.innerHTML + ' was just clicked')
+  
+	run();
+});
 
 async function run(){
 	const busInfo = await getBusLocations();
@@ -65,7 +75,9 @@ async function run(){
 				map.on('mouseenter', 'map', function() {
 					map.getCanvas().style.cursor = 'pointer';
 					});
-			
+					map.flyTo({
+						center: [busInfo[0].longitude, busInfo[0].latitude]
+					})
 				map.on('mouseleave', 'map', function() {
 					map.getCanvas().style.cursor = '';
 					});
@@ -87,26 +99,28 @@ async function run(){
 
 // Request bus data from MBTA and returns object for locations
 async function getBusLocations(){
-	const url = 'https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip';
+	// const url = 'https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip';
+	const url = `https://api-v3.mbta.com/vehicles?filter[route]=${routeNum}&include=trip`;
+
+	
 	const response = await fetch(url);
 	const json     = await response.json(); 
 
-// console.log(json.data)
+console.log(json.data)
 	// create an array of objects for bus locations
 	let length = json.data.length;
 	let busInfo = [];
 	for (let i=0; i<length; i++) {
-		let formatOccupancy = (json.data[i].attributes.occupancy_status).toLowerCase().replaceAll('_', ' ')
+		let formatOccupancy = json.data[i].attributes.occupancy_status ? json.data[i].attributes.occupancy_status.toLowerCase().replaceAll('_', ' ') : 'Unknown';
 		let newBus = ({direction: json.data[i].attributes.direction_id,
 					longitude: json.data[i].attributes.longitude,
 					latitude: json.data[i].attributes.latitude,
 					occupancy: formatOccupancy
 					});
-					// console.log()
 		busInfo.push(newBus)
 	}
 	return busInfo;	
 };
 
-run();
+// run();
 

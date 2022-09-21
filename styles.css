@@ -10,15 +10,35 @@ h1 {
     height: fit-content;
     margin-top: 0;
     padding: 10px;
-    height: 80px;
+    height: 70px;
     text-align: center;
     vertical-align: middle;
 }
+aside{
+    width: 8%;
+    padding-left: 15px;
+    margin-left: 15px;
+    float: right;
+    font-style: italic;
+}
+button{
+    background-color:lightskyblue;
+    border: black solid 2px;
+    color: black;
+    padding: 5px;
+    margin: 5px;
+    width: 50px;
+    text-align: center;
+    /* text-decoration:; */
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+}
 #map { 
     position: absolute; 
-    top: 60px; 
+    top: 70px; 
     bottom: 0; 
-    width: 100%; 
+    width: 92%; 
 }
 .map-overlay {
     position: absolute;
@@ -42,4 +62,5 @@ h1 {
     border-radius: 50%;
     cursor: pointer;
 }
+
       

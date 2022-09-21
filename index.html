@@ -7,13 +7,29 @@
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="./styles.css" rel="stylesheet" />
 
 </head>
 
 <body>
-    <h1>Boston Bus Tracker</h1>
-    <div id="map"></div>
+    
+    <div class=wrapper>
+        <h1>Boston Bus Tracker</h1>
+        <aside id="routes-list"> Routes:
+            <button id="button">1</button>
+            <button id="button">4</button>
+            <button id="button">15</button>
+            <button id="button">32</button>
+            <button id="button">77</button>
+            <button id="button">92</button>
+            <button id="button">93</button>
+            <button id="button">111</button>
+            <button id="button">116</button>
+            <button id="button">117</button>
+        </aside>
+        <div id="map"></div>
+    </div>
     <script src="realTimeBusTracker.js"></script>
 </body>
 
