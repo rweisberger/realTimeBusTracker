@@ -2,9 +2,21 @@ body {
     margin: 0; 
     padding: 0; 
 }
+h1 {
+    z-index: 10;
+    background-color: lightgray;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: lighter;
+    height: fit-content;
+    margin-top: 0;
+    padding: 10px;
+    height: 80px;
+    text-align: center;
+    vertical-align: middle;
+}
 #map { 
     position: absolute; 
-    top: 0; 
+    top: 60px; 
     bottom: 0; 
     width: 100%; 
 }

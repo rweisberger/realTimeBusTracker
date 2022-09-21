@@ -4,7 +4,7 @@ const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
     center: [-71.101,42.348],
-    zoom: 12.5
+    zoom: 12.75
 });
 
 
@@ -15,7 +15,6 @@ async function run(){
 	let blueBusLocations = [];
 	let redBusLocations = [];
 
-
 	for (let i = 0; i < currentMarkers.length; i++) {
     	currentMarkers[i].remove();
     }
@@ -23,45 +22,68 @@ async function run(){
 	currentMarkers = [];
 
 	for (let i = 0; i < busInfo.length; i++) {
-		if (busInfo[i][0] === 0) {
-				let newLocation = [];
-				newLocation.push(busInfo[i][1]);
-				newLocation.push(busInfo[i][2]);
-				blueBusLocations.push(newLocation);
+		if (busInfo[i].direction === 0) {
+				let newOutboundLocation = [];
+				newOutboundLocation.push(busInfo[i].longitude, busInfo[i].latitude);
+				blueBusLocations.push(newOutboundLocation);
 			
 			blueBusLocations.forEach(location => {
+				const popup = new mapboxgl.Popup({
+					closeButton: false,
+					closeOnClick: true
+					})
+					.setText(`Outbound: ${busInfo[i].occupancy}`)
+					map.on('mouseenter', 'map', function() {
+						map.getCanvas().style.cursor = 'pointer';
+						});
+				
+					map.on('mouseleave', 'map', function() {
+						map.getCanvas().style.cursor = '';
+						});
 				const el = document.createElement('div');
 					el.className = 'blueBusMarker';
 				const marker = new mapboxgl.Marker(el)
 					.setLngLat(location)
-					.addTo(map);
+					.addTo(map)
+					.setPopup(popup);
 
 				currentMarkers.push(marker);
 			});
 		}
-	}
-	for (let i = 0; i < busInfo.length; i++) {
-		if (busInfo[i][0] === 1) {
-				let newLocation = [];
-				newLocation.push(busInfo[i][1]);
-				newLocation.push(busInfo[i][2]);
-				redBusLocations.push(newLocation);
-			
+		if (busInfo[i].direction === 1) {
+			let newLocation = [];
+			newLocation.push(busInfo[i].longitude, busInfo[i].latitude);
+			// newLocation.push(busInfo[i].latitude);
+			redBusLocations.push(newLocation);
+		
 			redBusLocations.forEach(location => {
-				const el = document.createElement('div');
-					el.className = 'redBusMarker';
-				const marker = new mapboxgl.Marker(el)
-					.setLngLat(location)
-					.addTo(map);
+			const popup = new mapboxgl.Popup({
+				closeButton: false,
+				closeOnClick: true
+				})
+				.setText(`Inbound: ${busInfo[i].occupancy}`)
+				map.on('mouseenter', 'map', function() {
+					map.getCanvas().style.cursor = 'pointer';
+					});
+			
+				map.on('mouseleave', 'map', function() {
+					map.getCanvas().style.cursor = '';
+					});
+			const el = document.createElement('div');
+				el.className = 'redBusMarker';
+			const marker = new mapboxgl.Marker(el)
+				.setLngLat(location)
+				.addTo(map)
+				.setPopup(popup);
 
-				currentMarkers.push(marker);
+			currentMarkers.push(marker);
 			});
 		}
 	}
-	console.log(currentMarkers)
 
 	setTimeout(run, 15000);
 }
+
 
 // Request bus data from MBTA and returns object for locations
 async function getBusLocations(){
@@ -69,19 +91,20 @@ async function getBusLocations(){
 	const response = await fetch(url);
 	const json     = await response.json(); 
 
-console.log(json.data)
-	// create an array of arrays for bus locations
+// console.log(json.data)
+	// create an array of objects for bus locations
 	let length = json.data.length;
 	let busInfo = [];
 	for (let i=0; i<length; i++) {
-		var newBus= [];
-		newBus.push(json.data[i].attributes.direction_id);
-		newBus.push(json.data[i].attributes.longitude);
-		newBus.push(json.data[i].attributes.latitude);
+		let formatOccupancy = (json.data[i].attributes.occupancy_status).toLowerCase().replaceAll('_', ' ')
+		let newBus = ({direction: json.data[i].attributes.direction_id,
+					longitude: json.data[i].attributes.longitude,
+					latitude: json.data[i].attributes.latitude,
+					occupancy: formatOccupancy
+					});
+					// console.log()
 		busInfo.push(newBus)
 	}
-
-	console.log(busInfo);
 	return busInfo;	
 };
 
