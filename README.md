@@ -1,13 +1,13 @@
 ## realTimeBusTracker
 
 ### Description
-<p> This will show markers for all the buses running on Route 1 in Boston.  The outbound buses have a blue marker and the inbound buses have a red marker. The location of each bus will update every 15 seconds. </p>
+<p> This application uses the Massachusetts Bay Transportation Authority (MBTA) api to get real-time bus information. Click on the route you want and bus icons will appear in their current locations, red for inbound and blue for outbound. Click and you will see popups that indicate outbound and inboud direction and seat availability.</p>
 
 ### How to Run
 <p> Go to Mapbox.com and <b> get an API access token </b> and add it to the realTimeBusTracker.js file. Download the files and open the index.html file in your browser. </p>
 
 ### Roadmap
-<p> A label could me added to each bus and to add other bus routes could potentially be added. </p>
+<p> Add additional routes, inprove sylying, make mobile compatible, improve recentering with "flyto" feature and add a map key for bus colors instead of including the information in the popup. </p>
 
 ### License
 <p> The starter code for this project was provided by MIT xPRO. </p>
