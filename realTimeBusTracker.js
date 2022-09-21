@@ -15,6 +15,7 @@ let routeNum;
 const element = document.getElementById("routes-list");
 	element.addEventListener("click", event => {
 	routeNum = event.target.innerHTML;
+	document.getElementById("header").innerHTML = `Boston Bus Tracker: Route ${routeNum}`;
     // console.log('The item ' + event.target.innerHTML + ' was just clicked')
 	
 	run();
@@ -116,6 +117,7 @@ async function getBusLocations(){
 		document.getElementById("alert").innerHTML = "No buses en route";
 		console.log('no buses')
 	} else {
+		document.getElementById("alert").innerHTML = "";
 		for (let i=0; i<length; i++) {
 			let formatOccupancy = json.data[i].attributes.occupancy_status ? json.data[i].attributes.occupancy_status.toLowerCase().replaceAll('_', ' ') : 'Unknown';
 			let newBus = ({direction: json.data[i].attributes.direction_id,
